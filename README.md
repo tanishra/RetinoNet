@@ -30,12 +30,6 @@ The goal is to make retinal disease detection more **accessible**, **scalable**,
 
 ---
 
-
-## 🧩 Installation & Setup
-
-Clone the repository:
-
-```bash
-git clone https://github.com/tanishra/RetinoNet.git
-cd RetinoNet
-```
+## 🤝 Contributing
+Pull requests are welcome!
+If you find a bug or want to improve the project, feel free to fork and submit a PR.
