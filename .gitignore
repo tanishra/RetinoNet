@@ -6,3 +6,4 @@ college
 processed_images
 venv
 Dataset
+.env
