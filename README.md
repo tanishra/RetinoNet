@@ -22,14 +22,6 @@ The goal is to make retinal disease detection more **accessible**, **scalable**,
 
 ---
 
-## 🧠 How It Works
--**Image Upload** – User uploads a retinal image via the web interface.
--**Model Inference** – The backend processes the image using a pre-trained deep learning model.
--**Prediction Result** – The model classifies the image (e.g., Mild, Moderate, Severe DR).
--**Report Generation** – Results are displayed and optionally saved for later access.
-
----
-
 ## 🛠 Tech Stack
 - **Deep Learning:** TensorFlow / Keras
 - **Frontend:** React.js / Next.js
@@ -38,27 +30,6 @@ The goal is to make retinal disease detection more **accessible**, **scalable**,
 
 ---
 
-## 📊 Model Architecture
--**Type:** Convolutional Neural Network (CNN)
--**Input:** Retinal Fundus Image
--**Layers:** Conv → MaxPooling → Dropout → Dense
--**Output:** Retinopathy severity classification
--**Evaluation Metrics:** Accuracy, AUC, Recall
-
----
-
-## 💡 Future Enhancements
-- 📱 Mobile application integration
-- 🗣 Multilingual support for broader accessibility
-- 🌐 Deploy on cloud (e.g., AWS, GCP) for better scalability
-- 🩺 Integration with EHR systems for clinical use
-- 🧬 Train model on higher-resolution and more diverse datasets
-
----
-
-
 ## 🤝 Contributing
 Pull requests are welcome!
 If you find a bug or want to improve the project, feel free to fork and submit a PR.
-
-## 
