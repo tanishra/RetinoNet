@@ -1,3 +1,5 @@
 node_modules
 __pycache__
 instance
+/static/uploads
+/Mobile_Pit_last_checkpoint.pt
