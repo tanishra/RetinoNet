@@ -1,33 +1,32 @@
+"use client";
 
-"use client"
-
-import React, { useState } from "react"
-import { Eye, EyeOff, ArrowRight } from "lucide-react"
-import { useNavigate, Link } from "react-router-dom"
-import axios from "axios"
+import React, { useState } from "react";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 const SignupPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-  })
+  });
 
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
@@ -35,26 +34,32 @@ const SignupPage = () => {
         firstName: formData.firstName,
         lastName: formData.lastName,
         password: formData.password,
-      })
+      });
 
-      localStorage.setItem("token", response.data.token)
-      navigate("/dashboard")
+      // Save user token and data to localStorage
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+      }));
+
+      navigate("/dashboard");
     } catch (error) {
-      console.error("Signup failed:", error)
-      alert("Signup failed. Please check your inputs.")
+      console.error("Signup failed:", error);
+      alert("Signup failed. Please check your inputs.");
     }
-  }
+  };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="flex h-screen w-screen overflow-hidden md:flex-row flex-col">
-
       {/* Left side - Form */}
       <div className="flex w-full h-full items-center justify-center bg-white px-6 py-4 md:w-1/2 md:p-10 overflow-auto">
-      <div className="w-full max-w-md space-y-8">
+        <div className="w-full max-w-md space-y-8">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight text-black">Create an account</h1>
             <p className="text-sm text-gray-500">Enter your information below to create your account</p>
@@ -156,7 +161,7 @@ const SignupPage = () => {
 
       {/* Right side - Quote */}
       <div className="hidden md:flex w-full h-full items-center justify-center bg-black p-10 text-white md:w-1/2">
-      <div className="max-w-md space-y-6">
+        <div className="max-w-md space-y-6">
           <blockquote className="space-y-2">
             <p className="text-2xl font-light italic leading-relaxed">
               "The future belongs to those who believe in the beauty of their dreams."
@@ -170,7 +175,7 @@ const SignupPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export const Signup = SignupPage
+export const Signup = SignupPage;

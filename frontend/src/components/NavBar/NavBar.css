@@ -48,3 +48,44 @@
     transform: translateY(-100%);
 }
 
+.user-name {
+    margin-right: 1rem;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .logout-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 1rem;
+    font-size: 1rem;
+  }
+
+  .signup-btn {
+    position: relative;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 500;
+    margin-left: 40px;
+  }
+  
+  .signup-btn:hover{
+    transform: scale(1.05);
+  }
+  
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Adds spacing between all items */
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+}
+
+#history {
+    margin-right: 20px;
+}
