@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Model files (should not be copied)
+*.pt
+*.pth
+*.pkl
+*.h5
+
+# Hugging Face tokens or secrets
+.env
+
+# Uploads
+static/uploads/*
+
+# Git
+.git
+.gitignore
+
+# Docker-related
+.dockerignore
+Dockerfile
