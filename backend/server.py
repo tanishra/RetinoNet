@@ -187,7 +187,7 @@ Model_Mobile = models.mobilenet_v2(pretrained=True)
 num_features_mobile = Model_Mobile.classifier[1].in_features
 Model_Mobile.classifier = nn.Identity()
 
-Model_pit = timm.create_model(Model_P, pretrained=True, num_classes=5)
+Model_pit = timm.create_model(Model_P, pretrained=False, num_classes=5)
 num_features_pit = Model_pit.head.in_features
 Model_pit.head = nn.Identity()
 
