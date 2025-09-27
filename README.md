@@ -11,6 +11,9 @@ The goal is to make retinal disease detection more **accessible**, **scalable**,
 
 ---
 
+## 🚀 Live Demo
+You can access the live, deployed version of RetinoNet here: [Link](https://retino-net-eight.vercel.app)  
+
 ## ✨ Features
 - 🔍 Upload retinal fundus images and get instant predictions
 - 🧠 Deep learning-based image classification (CNN model)
