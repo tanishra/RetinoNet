@@ -4,7 +4,6 @@ FROM python:3.10.18-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV HF_TOKEN = "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"
 
 # Set work directory
 WORKDIR /backend
