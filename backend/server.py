@@ -156,7 +156,7 @@ from flask_migrate import Migrate
 from datetime import datetime
 from huggingface_hub import hf_hub_download
 
-
+# ---------- FLASK SETUP ----------
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:5173"])
 
@@ -168,21 +168,21 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db.init_app(app)
-
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# ---------- ALLOWED FILE TYPES ----------
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-# ---------- MODEL SETUP ----------
-LEARNING_RATE = 1e-4
+# ---------- GLOBAL VARIABLES ----------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 checkpoint_filename = "Mobile_Pit_last_checkpoint.pt"
 checkpoint_repo = "Tanishrajput/Diabetic-Retinopathy-Detection"
+class_names = ['No_DR', 'Mild', 'Moderate', 'Severe', 'Proliferate_DR']
+model = None  # ✅ Global model placeholder
 
+# ---------- FILE TYPE CHECK ----------
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# ---------- MODEL ARCHITECTURE ----------
 Model_P = "pit_b_224"
-
 Model_Mobile = models.mobilenet_v2(pretrained=True)
 num_features_mobile = Model_Mobile.classifier[1].in_features
 Model_Mobile.classifier = nn.Identity()
@@ -212,26 +212,19 @@ class CombinedModel(nn.Module):
 
 model_co = CombinedModel(Model_Mobile, Model_pit, num_classes=5).to(device)
 
+# ---------- LOAD MODEL FUNCTION ----------
 def load_model_from_huggingface(repo_id, filename, device):
-    # Get token from Railway environment variable
-    token = os.environ.get("HUGGINGFACE_TOKEN")
-
-    # Download the model file
+    token = os.environ.get("HUGGINGFACE_TOKEN")  # 🔐 Get from env
     checkpoint_path = hf_hub_download(
         repo_id=repo_id,
         filename=filename,
         token=token
     )
-
-    # Load the model weights
     checkpoint = torch.load(checkpoint_path, map_location=device)
     model_co.load_state_dict(checkpoint["model_state_dict"])
     model_co.to(device)
     model_co.eval()
     return model_co
-
-model = load_model_from_huggingface(checkpoint_repo, checkpoint_filename, device)
-class_names = ['No_DR', 'Mild', 'Moderate', 'Severe', 'Proliferate_DR']
 
 # ---------- PREDICTION FUNCTION ----------
 def predict_image(img, model, device):
@@ -241,24 +234,25 @@ def predict_image(img, model, device):
         transforms.Normalize([0.485, 0.456, 0.406],
                              [0.229, 0.224, 0.225])
     ])
-
     img_tensor = transform(img).unsqueeze(0).to(device)
     model.eval()
-
     with torch.no_grad():
         outputs = model(img_tensor)
         pred_class = torch.argmax(outputs, dim=1).item()
-
     return pred_class, class_names[pred_class]
 
 # ---------- PREDICT ROUTE ----------
 @app.route('/predict', methods=['POST'])
 def predict():
+    global model
+
+    if model is None:
+        return jsonify({'success': False, 'message': 'Model not loaded'}), 500
+
     if 'image' not in request.files:
         return jsonify({'success': False, 'message': 'Missing image file'}), 400
 
     file = request.files['image']
-    
     if file.filename == '' or not allowed_file(file.filename):
         return jsonify({'success': False, 'message': 'Invalid file type'}), 400
 
@@ -280,8 +274,14 @@ def predict():
         print(f"Prediction error: {str(e)}")
         return jsonify({'success': False, 'message': 'Error during prediction'}), 500
 
-# ---------- INIT DB AND RUN ----------
+# ---------- INIT DB & LOAD MODEL AT RUNTIME ----------
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+
+    print("🔁 Downloading model")
+    model = load_model_from_huggingface(checkpoint_repo, checkpoint_filename, device)
+    print("✅ Model loaded successfully.")
+
     app.run(port=5001, debug=True)
+
