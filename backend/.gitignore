@@ -4,3 +4,5 @@ instance
 /static/uploads
 /Mobile_Pit_last_checkpoint.pt
 .DS_Store
+.env
+upload_model.py
